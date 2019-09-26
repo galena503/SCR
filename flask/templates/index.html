@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="static/css/main.css">
+    <script src="../static/js/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <nav>
+            <div class="nav-wrapper grey darken-4">
+                <a href="#!" class="brand-logo">code Regulator</a>
+                <ul class="right hide-on-med-and-down">
+                    <li @click="disp.timer = !disp.timer"><i class="material-icons disp_w grey-text text-darken-1">timer</i></li>
+                    <li @click="disp.flash = !disp.flash"><i class="material-icons disp_w grey-text text-darken-1">flash_on</i></li>
+                    <li @click="disp.tune = !disp.tune"><i class="material-icons disp_w grey-text text-darken-1">tune</i></li>
+                    <li @click="disp.set = !disp.set"><i class="material-icons disp_w grey-text text-darken-1">settings_input_component</i></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="row main_row grey darken-2">
+            <div class="col s2 side grey darken-3">
+
+                <div class="switch">
+                    <p>timer lock</p>
+                    <label>
+                        Off
+                        <input v-model="s_change" type="checkbox">
+                        <span class="lever"></span>
+                        On
+                    </label>
+                </div>
+
+            </div>
+            <div class="col s10">
+                <div class="row">
+                    <div class="col s12 grey darken-2 timer monitor_lock" v-if="disp.timer">
+                        <div v-if="s_change" class="monitor_lock_cover"> <p>lock</p> </div>
+                        <h2>timer</h2>
+                        <div class="row no_bm">
+                            <div class="input-field col s2">
+                                <h3>Added code</h3>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="add_code.d" id="directory" type="text" class="validate">
+                                <label for="directory">directory</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input v-model="add_code.f" id="file_name" type="text" class="validate">
+                                <label for="file_name">file name</label>
+                            </div>
+                            <div class="input-field col s2">
+                                <input v-model="add_code.i" id="interval" type="text" class="validate">
+                                <label for="interval">interval</label>
+                            </div>
+                            <div class="input-field col s1">
+                                <button class="waves-effect waves-light btn-small" @click="post_d_test();">add</button>
+                            </div>
+                        </div>
+                        <div>
+                            <table>
+                                <tbody v-for="(tasks, t_index) in schedule.tasks" :key=tasks.index>
+                                    <tr v-for="(item, i_index) in tasks.items" :key=item.index>
+                                        <td>
+                                            <div class="switch">
+                                                <label>
+                                                    Off
+                                                    <input v-model="schedule.tasks[t_index].items[i_index].switch" type="checkbox" >
+                                                    <span class="lever"></span>
+                                                    On
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>[[ tasks.key ]] / </td>
+                                        <td>[[ item.f ]].py</td>
+                                        <td>[[ item.s ]] sec</td>
+                                        <td><button class="waves-effect waves-light btn-small" @click="del_task(t_index,i_index)">delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="code">
+                                    [[schedule]]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 grey darken-3 flash_on" v-if="disp.flash">
+                        <h2>flash</h2>
+                    </div>
+                    <div class="col s12 grey darken-2 tune" v-if="disp.tune">
+                        <h2>tune</h2>
+                    </div>
+                    <div class="col s12 grey darken-3 input" v-if="disp.set">
+                        <h2>settings</h2>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="static/js/cr_vue_app.js"></script>
+    <script src="static/js/cr_vue_components.js"></script>
+    <script>
+        Vue.config.debug = true;
+        window.setInterval(function () {
+                sol_app.get_0_sch();
+        }, 1000);
+    </script>
+
+</body>
+
+</html>

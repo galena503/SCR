@@ -1,0 +1,125 @@
+
+
+if [ $# = 0 ] ; then
+    echo "-- scrctl help --"
+    echo "more info URL : "
+    echo " "
+    echo "SCR mod command"
+    echo "  get"
+    echo "    Displays information about the SCR that currently exists."
+    echo " "
+    echo "  top [option]"
+    echo "    Displays the resources consumed by each current SCR."
+    echo " "
+    echo "SCR lock operation command"
+    echo "  lock <true/false> -ap <adminpass>"
+    echo "    Sets the scrctl command lock."
+    echo "  "
+    echo "  guilock <true/false> -ap <adminpass> [option]"
+    echo "    Set and start scr-gui lock."
+    echo " "
+    echo "SCR basic operation commands"
+    echo "  create -p <adminpass> [option]"
+    echo "    Create new SCR"
+    echo " "
+    echo "  chain-create -fid <fid> -a <ip> -u <user> -p <pass> [option]"
+    echo "    Chain create new SCR on ssh"
+    echo " "
+    echo "  abdel -id <id> -fid <fid>"
+    echo "    Delete all contents of ability & flash ability folder"
+    echo " "
+    echo "  start [option]"
+    echo "    Start an existing SCR."
+    echo " "
+    echo "  stop [option]"
+    echo "    Stops the specified SCR."
+    echo " "
+    echo "  remove -a [ip] -u [user] -p [pass] [option]"
+    echo "    Stops and deletes the SCR using the specified SSH user."
+    echo " "
+    echo "  chain -toid [toid] -tofid [tofid] -a [ip] -u [user] -p [pass] -ap [adminpass] [option]"
+    echo "    You can join an SCR to another SCR field."
+    echo "    The ID of the participating SCR will be changed."
+    echo " "
+    echo "SCR task operation command"
+    echo "  task li [option]"
+    echo "    The task information of the specified SCR is output."
+    echo " "
+    echo "  task stop [option]"
+    echo "    Pauses all task execution."
+    echo "    Task data and new task data are retained."
+    echo "      :option"
+    echo "        -ab <folder>/<file>   Stops only the specified ability"
+    echo "        -fab <folder>/<file>  Stops only the specified flash ability"
+    echo "        -ni                   Other than immortal tag"
+    echo " "
+    echo "SSQL operation commands"
+    echo "  ssql <true/false> -ap [adminpass]"
+    echo "    Set SSQL execution from CUI."
+    echo " "
+    echo "  ssql [-ssqlid <ssqlid>] -ssql [SQL]"
+    echo "    Execute SSQL."
+    echo " "
+    echo "  ssql stop -ap [adminpass]"
+    echo "    SSQL execution stops and accumulates."
+    echo " "
+    echo "  ssql get dump [ssqlid [ssqlid]]"
+    echo "    You can refer to dump data when SSQL stops."
+    exit
+fi
+
+com=$1
+nextarg=0
+argno=$#
+# ここにtaskとscrsql入れる
+
+argid=notarg
+argfid=notarg
+argap=notarg
+argp=notarg
+argu=notarg
+arga=notarg
+argtoid=notarg
+argtofid=notarg
+
+for op in $2 $3 $4 $5 $6 $7 $8 $9 ${10}
+do
+    if [ $nextarg = 0 ] ; then
+
+        if [ $op = -id ] ; then nextarg="id" ; fi
+        if [ $op = -fid ] ; then nextarg="fid" ; fi
+        if [ $op = -ap ] ; then nextarg="ap" ; fi
+        if [ $op = -p ] ; then nextarg="p" ; fi
+        if [ $op = -u ] ; then nextarg="u" ; fi
+        if [ $op = -a ] ; then nextarg="a" ; fi
+        if [ $op = -toid ] ; then nextarg="toid" ; fi
+        if [ $op = -tofid ] ; then nextarg="tofid" ; fi
+    else
+        if [ $nextarg = "id" ] ; then argid=$op ; fi
+        if [ $nextarg = "fid" ] ; then argfid=$op ; fi
+        if [ $nextarg = "ap" ] ; then argap=$op ; fi
+        if [ $nextarg = "p" ] ; then argp=$op ; fi
+        if [ $nextarg = "u" ] ; then argu=$op ; fi
+        if [ $nextarg = "a" ] ; then arga=$op ; fi
+        if [ $nextarg = "toid" ] ; then argtoid=$op ; fi
+        if [ $nextarg = "tofid" ] ; then argtofid=$op ; fi
+        nextarg=0
+    fi
+
+    if [ argno = 1 ] ; then
+        break
+    else
+        argno=argno-1
+    fi
+done
+
+echo "com = $com"
+echo "-id        = $argid"
+echo "-fid       = $argfid"
+echo "-ap        = $argap"
+echo "-p         = $argp"
+echo "-u         = $argu"
+echo "-a         = $arga"
+echo "-toid      = $argtoid"
+echo "-tofid     = $argtofid"
+
